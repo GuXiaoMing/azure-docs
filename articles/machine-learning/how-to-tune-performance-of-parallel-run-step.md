@@ -34,23 +34,23 @@ This guide helps users to measure and tune parameters in term of performance whe
 
 # Set `node_count` and `process_count_per_node`
 The max number of worker processes running in parallel is `node_count * process_count_per_node`.
-In dev phase, you have tested out the duration per mini batch locally and use the following formula to estimate the suitable parameters.
+In dev phase, you can test out the duration per mini batch locally and use the following formula to estimate the suitable parameters.
 
 `node_count * process_count_per_node = desired_total_duration / duration_per_mini_batch`
 
 
 # Choose mini batch size
 
-Pipeline lifecycle
-1. provision nodes. before ParallelTask, a run will start after all required nodes provisioned.
-1. build image. This is required for the first time of a run and then it will be cached. **Link to the cache doc**
-1. job preparation.
-1. start PRS launcher on the master node and then give control to PRS.
-1. a master role start task scheduling. scheduling logs to `logs/sys/master_role....`.
-1. while scheduling tasks, an agent manager on each node start worker process up to the number specified by `process_count_per_node`.
-1. each worker process calls init(), then picks mini batch up and call run() by passing the mini batch and turn control to user code. meanwhile, the agent manager monitors the progress of a worker process.
-1. the master role collect the progress.
-1. the master role concatenate the temp files.
+# Pipeline lifecycle
+1. Provision nodes. before ParallelTask, a run will start after all required nodes provisioned.
+1. Build image. This is required at the first time of a run and then it will be cached. **Link to the cache doc**
+1. Prepare job.
+1. Start PRS launcher on the master node and then give control to PRS.
+1. A master role start task scheduling. Scheduling progress logs to `logs/sys/master_role....`.
+1. While scheduling tasks, an agent manager on each node starts worker processes up to the number specified by `process_count_per_node`.
+1. Each worker process calls init(), then picks mini batch up and call run() by passing the mini batch and turn over control to user code; meanwhile, the agent manager monitors the progress of worker processes.
+1. The master role collect the progress.
+1. The master role concatenate the result files.
 
 # Check performance metrics
 
